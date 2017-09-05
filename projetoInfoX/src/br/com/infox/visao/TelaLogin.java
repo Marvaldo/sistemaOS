@@ -6,6 +6,7 @@
 package br.com.infox.visao;
 
 import br.com.infox.conexaobd.ConexaoBD;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +19,8 @@ import javax.swing.JOptionPane;
 public class TelaLogin extends javax.swing.JFrame {
 
     ConexaoBD conex = new ConexaoBD();
-    
+    TelaPrincipal telaPrincipal = new TelaPrincipal();
+
     /**
      * Creates new form TelaLogin
      */
@@ -39,6 +41,7 @@ public class TelaLogin extends javax.swing.JFrame {
         jButtonLogin = new javax.swing.JButton();
         jTextFieldLogin = new javax.swing.JTextField();
         jPasswordFieldSenha = new javax.swing.JPasswordField();
+        jLabelStatus = new javax.swing.JLabel();
         jLabelFundo_Login = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,6 +56,11 @@ public class TelaLogin extends javax.swing.JFrame {
                 jButtonLoginActionPerformed(evt);
             }
         });
+        jButtonLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButtonLoginKeyPressed(evt);
+            }
+        });
         getContentPane().add(jButtonLogin);
         jButtonLogin.setBounds(140, 410, 220, 60);
 
@@ -62,8 +70,15 @@ public class TelaLogin extends javax.swing.JFrame {
         jTextFieldLogin.setBounds(95, 221, 370, 54);
 
         jPasswordFieldSenha.setFont(new java.awt.Font("Dialog", 0, 30)); // NOI18N
+        jPasswordFieldSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPasswordFieldSenhaKeyPressed(evt);
+            }
+        });
         getContentPane().add(jPasswordFieldSenha);
         jPasswordFieldSenha.setBounds(95, 296, 370, 54);
+        getContentPane().add(jLabelStatus);
+        jLabelStatus.setBounds(30, 440, 80, 0);
 
         jLabelFundo_Login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/imagens/fundo_login.png"))); // NOI18N
         getContentPane().add(jLabelFundo_Login);
@@ -73,22 +88,47 @@ public class TelaLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
-        
+    public void logar() {
         try {
-            conex.executaSql("select * from usuarios where login_usuario = '"+jTextFieldLogin.getText()+"'");
+            conex.executaSql("select * from usuarios where login_usuario = '" + jTextFieldLogin.getText() + "'");
             conex.resultSet.first();
-            
-            if(conex.resultSet.getString("login_usuario").equals(jTextFieldLogin.getText()) && 
-                    conex.resultSet.getString("senha_usuario").equals(jPasswordFieldSenha.getText())){
-                JOptionPane.showMessageDialog(rootPane, "Logando ao sistema");
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "USUARIO OU SENHA INVALIDOS!");
+
+            if (conex.resultSet.getString("login_usuario").equals(jTextFieldLogin.getText())
+                    && conex.resultSet.getString("senha_usuario").equals(jPasswordFieldSenha.getText())) {
+                telaPrincipal.setVisible(true);
+                String perfil = conex.resultSet.getString(6);//pega conteudo do perfil no banco de dados
+                if (perfil.equals("admin")) {
+                    telaPrincipal.jMenuItemCadUsuario.setEnabled(true);
+                    telaPrincipal.jMenuRelatorio.setEnabled(true);
+                }
+//                System.out.println(perfil);
+
+                dispose();
+                conex.desconecta();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "USUARIO OU SENHA INVALIDOS!");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "ERRO AO CONECTAR!!!");
         }
+    }
+
+    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
+        logar();
     }//GEN-LAST:event_jButtonLoginActionPerformed
+
+    private void jPasswordFieldSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordFieldSenhaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            logar();
+        }
+    }//GEN-LAST:event_jPasswordFieldSenhaKeyPressed
+
+    private void jButtonLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButtonLoginKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            logar();
+        }
+    }//GEN-LAST:event_jButtonLoginKeyPressed
 
     /**
      * @param args the command line arguments
@@ -128,6 +168,7 @@ public class TelaLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonLogin;
     private javax.swing.JLabel jLabelFundo_Login;
+    private javax.swing.JLabel jLabelStatus;
     private javax.swing.JPasswordField jPasswordFieldSenha;
     private javax.swing.JTextField jTextFieldLogin;
     // End of variables declaration//GEN-END:variables
