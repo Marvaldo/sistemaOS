@@ -5,6 +5,7 @@
  */
 package br.com.infox.visao;
 
+import java.awt.Color;
 import java.text.DateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -18,8 +19,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form TelaPrincipal
      */
-    public TelaPrincipal() {
+    public TelaPrincipal(String usuario) {
         initComponents();
+        jLabelUsuario.setText(usuario);
+    }
+
+    private TelaPrincipal() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -34,7 +40,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabelUsuario = new javax.swing.JLabel();
         jLabelData = new javax.swing.JLabel();
-        jInternalFrame1 = new javax.swing.JInternalFrame();
+        jLabelInfoData = new javax.swing.JLabel();
+        jLabelInfoUsuario = new javax.swing.JLabel();
+        jDesktopPaneDesktop = new javax.swing.JDesktopPane();
         jMenuBarMenu = new javax.swing.JMenuBar();
         jMenuCadastro = new javax.swing.JMenu();
         jMenuItemCadCliente = new javax.swing.JMenuItem();
@@ -60,33 +68,41 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/imagens/x-logo_200x200.png"))); // NOI18N
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(690, 270, 180, 200);
+        jLabel1.setBounds(690, 290, 180, 200);
 
-        jLabelUsuario.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabelUsuario.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelUsuario.setText("Usuário");
         getContentPane().add(jLabelUsuario);
-        jLabelUsuario.setBounds(740, 240, 100, 24);
+        jLabelUsuario.setBounds(810, 30, 100, 20);
 
-        jLabelData.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        jLabelData.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabelData.setText("Data");
         getContentPane().add(jLabelData);
-        jLabelData.setBounds(730, 180, 150, 47);
+        jLabelData.setBounds(810, 10, 80, 19);
 
-        jInternalFrame1.setVisible(true);
+        jLabelInfoData.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabelInfoData.setText("Data:");
+        getContentPane().add(jLabelInfoData);
+        jLabelInfoData.setBounds(750, 10, 40, 20);
 
-        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
-        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
-        jInternalFrame1Layout.setHorizontalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jLabelInfoUsuario.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabelInfoUsuario.setText("Usuário:");
+        getContentPane().add(jLabelInfoUsuario);
+        jLabelInfoUsuario.setBounds(730, 30, 60, 20);
+
+        javax.swing.GroupLayout jDesktopPaneDesktopLayout = new javax.swing.GroupLayout(jDesktopPaneDesktop);
+        jDesktopPaneDesktop.setLayout(jDesktopPaneDesktopLayout);
+        jDesktopPaneDesktopLayout.setHorizontalGroup(
+            jDesktopPaneDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 690, Short.MAX_VALUE)
         );
-        jInternalFrame1Layout.setVerticalGroup(
-            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jDesktopPaneDesktopLayout.setVerticalGroup(
+            jDesktopPaneDesktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jInternalFrame1);
-        jInternalFrame1.setBounds(20, 90, 650, 400);
+        getContentPane().add(jDesktopPaneDesktop);
+        jDesktopPaneDesktop.setBounds(10, 50, 690, 440);
 
         jMenuCadastro.setText("Cadastro");
 
@@ -101,6 +117,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuItemCadUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
         jMenuItemCadUsuario.setText("Usuários");
         jMenuItemCadUsuario.setEnabled(false);
+        jMenuItemCadUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCadUsuarioActionPerformed(evt);
+            }
+        });
         jMenuCadastro.add(jMenuItemCadUsuario);
 
         jMenuBarMenu.add(jMenuCadastro);
@@ -164,6 +185,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         sobre.setVisible(true);
     }//GEN-LAST:event_jMenuItemSobreActionPerformed
 
+    private void jMenuItemCadUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCadUsuarioActionPerformed
+        //abre a telausuario dentro do desktop pane
+        TelaUsuario usuario = new TelaUsuario();
+        usuario.setVisible(true);
+        jDesktopPaneDesktop.add(usuario);
+    }//GEN-LAST:event_jMenuItemCadUsuarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -200,10 +228,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JInternalFrame jInternalFrame1;
+    private javax.swing.JDesktopPane jDesktopPaneDesktop;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelData;
-    private javax.swing.JLabel jLabelUsuario;
+    private javax.swing.JLabel jLabelInfoData;
+    private javax.swing.JLabel jLabelInfoUsuario;
+    public static javax.swing.JLabel jLabelUsuario;
     private javax.swing.JMenu jMenuAjuda;
     private javax.swing.JMenuBar jMenuBarMenu;
     private javax.swing.JMenu jMenuCadastro;

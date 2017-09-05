@@ -6,11 +6,13 @@
 package br.com.infox.visao;
 
 import br.com.infox.conexaobd.ConexaoBD;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -19,7 +21,7 @@ import javax.swing.JOptionPane;
 public class TelaLogin extends javax.swing.JFrame {
 
     ConexaoBD conex = new ConexaoBD();
-    TelaPrincipal telaPrincipal = new TelaPrincipal();
+    
 
     /**
      * Creates new form TelaLogin
@@ -93,13 +95,14 @@ public class TelaLogin extends javax.swing.JFrame {
             conex.executaSql("select * from usuarios where login_usuario = '" + jTextFieldLogin.getText() + "'");
             conex.resultSet.first();
 
-            if (conex.resultSet.getString("login_usuario").equals(jTextFieldLogin.getText())
-                    && conex.resultSet.getString("senha_usuario").equals(jPasswordFieldSenha.getText())) {
+            if (conex.resultSet.getString("senha_usuario").equals(jPasswordFieldSenha.getText())) {
+                TelaPrincipal telaPrincipal = new TelaPrincipal(jTextFieldLogin.getText());
                 telaPrincipal.setVisible(true);
                 String perfil = conex.resultSet.getString(6);//pega conteudo do perfil no banco de dados
-                if (perfil.equals("admin")) {
+                if (perfil.equals("Administrador")) {
                     telaPrincipal.jMenuItemCadUsuario.setEnabled(true);
                     telaPrincipal.jMenuRelatorio.setEnabled(true);
+                    telaPrincipal.jLabelUsuario.setForeground(Color.red);
                 }
 //                System.out.println(perfil);
 
@@ -110,7 +113,7 @@ public class TelaLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "USUARIO OU SENHA INVALIDOS!");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "ERRO AO CONECTAR!!!");
+            JOptionPane.showMessageDialog(null, "USUARIO OU SENHA INVALIDOS!");
         }
     }
 
